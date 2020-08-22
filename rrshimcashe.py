@@ -11,9 +11,6 @@ def createParser ():
 
 	return parser
  
-shimcahe=False
-cnt=0;
-list=[]
 keys=[
 	'OBJECT',
 	'PATH',
@@ -37,21 +34,21 @@ month={
 	'Nov':'11',
 	'Dec':'12',
 	}	
+	
 def clear_record(rec=None):
 	rec={}
 	for key in keys:
 		rec[key]=''
 	return rec
-	
-record=clear_record()
-
-
 
 if __name__ == '__main__':
 	
 	parser = createParser()
 	namespace = parser.parse_args()
-      
+	record=clear_record()
+	shimcahe=False
+	list=[]      
+	
 	for line in namespace.infile:
 		if 'appcompatcache' in line:
 			shimcahe=True
@@ -70,7 +67,6 @@ if __name__ == '__main__':
 					record['TIME']=line.strip()[20:28]
 			else:
 				list.append(record)
-				cnt+=1
 				record=clear_record()
 			if '----------------------------------------' in line:
 				break
@@ -79,5 +75,3 @@ if __name__ == '__main__':
 	for item in list:
 		namespace.outfile.write(';'.join(item.values()))
 		namespace.outfile.write('\n')
-
-
