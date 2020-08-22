@@ -1,13 +1,12 @@
 # -*- coding: UTF-8 -*-
 
 import re
-import sys
 import argparse
 
 def createParser ():
 	parser = argparse.ArgumentParser()
-	parser.add_argument ('-if','--infile', nargs='?', type=argparse.FileType(encoding="windows-1251", errors='ignore'),required=True)
-	parser.add_argument ('-of','--outfile', nargs='?',  type=argparse.FileType(mode='w',encoding="windows-1251", errors='ignore'), default='file.csv')
+	parser.add_argument ('-if','--infile', nargs='?', type=argparse.FileType(encoding="windows-1251", errors='ignore'),required=True, help='imput file. Result of RegRipper')
+	parser.add_argument ('-of','--outfile', nargs='?',  type=argparse.FileType(mode='w',encoding="windows-1251", errors='ignore'), default='file.csv', help='output csv file')
 
 	return parser
  
@@ -59,9 +58,9 @@ if __name__ == '__main__':
 					record['OBJECT']=match.group(1)
 					record['PATH']=match.group(2)
 					record['FILE']=match.group(3)
-				if 'Executed' in line:
+				elif 'Executed' in line:
 					record['EXECUTED']='Executed'
-				if 'ModTime:' in line:
+				elif 'ModTime:' in line:
 					date=line.strip()[13:-2]
 					record['DATE']=(date[4:6]+'.'+month[date[:3]]+'.'+date[-4:]).lstrip()
 					record['TIME']=line.strip()[20:28]
@@ -75,3 +74,5 @@ if __name__ == '__main__':
 	for item in list:
 		namespace.outfile.write(';'.join(item.values()))
 		namespace.outfile.write('\n')
+	if not shimcahe:
+		print('ShimCache not found')
